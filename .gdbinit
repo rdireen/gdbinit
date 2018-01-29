@@ -1,3 +1,7 @@
+################################################################################
+# Randy Direen
+# Started January 2018
+################################################################################
 # Additional defines
 #
 # main - Start program and stop on main
@@ -41,6 +45,7 @@ set print sevenbit-strings off
 #*****************************************************************************
 
 source ~/.gdb/common.py
+source ~/.gdb/vrt.py
 
 #*****************************************************************************
 #*****************************************************************************
@@ -50,10 +55,41 @@ source ~/.gdb/common.py
 
 define main
     tbreak main
-    r
+    if $argc == 0
+        r
+    end
+    if $argc == 1
+        r $arg0
+    end
+    if $argc == 2
+        r $arg0 $arg1
+    end
+    if $argc == 3
+        r $arg0 $arg1 $argr2
+    end
+    if $argc == 4
+        r $arg0 $arg1 $arg2 $arg3
+    end
+    if $argc == 5
+        r $arg0 $arg1 $arg2 $arg3 $arg4
+    end
+    if $argc == 6
+        r $arg0 $arg1 $arg2 $arg3 $arg4 $arg5
+    end
+    if $argc == 7
+        r $arg0 $arg1 $arg2 $arg3 $arg4 $arg5 $arg6
+    end
+    if $argc == 8
+        r $arg0 $arg1 $arg2 $arg3 $arg4 $arg5 $arg6 $arg7
+    end
+
+# I could have made this differently, but I like the way it looks.
 end
 document main
 Run program and break on main()
+
+You can pass arguments with main "param1" "param2" etc. Just make sure to use
+the quotes!
 end
 
 define asm

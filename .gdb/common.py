@@ -3,7 +3,7 @@ Common utilities for GDB
 
 """
 # Clear python pretty printers
-gdb.pretty_printers[:] = []
+#gdb.pretty_printers[:] = []
 
 #******************************************************************************
 #                           Little Helpers
@@ -98,17 +98,18 @@ class PrettyPrintBreakpoints(gdb.Command):
         print("\33[33m NUM         TYPE       ENABL  Location\33[0m")
         print("------  --------------  -----  --------")
         tp = "{0:>5}:  {1:<14} {2:>4}     {3}"
-        for b in bs:
-            if b.is_valid():
+        if(bs):
+            for b in bs:
+                if b.is_valid():
 
-                if(b.location != None):
-                    loc =  b.location.split("/")[-1]
-                elif(b.expression != None):
-                    loc = b.expression
+                    if(b.location != None):
+                        loc =  b.location.split("/")[-1]
+                    elif(b.expression != None):
+                        loc = b.expression
 
-                print(tp.format(b.number, 
-                                self.type[b.type],
-                                b_str[b.enabled], loc))
+                    print(tp.format(b.number, 
+                                    self.type[b.type],
+                                    b_str[b.enabled], loc))
 
         print("")
 
