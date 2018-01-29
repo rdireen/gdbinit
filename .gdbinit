@@ -2,12 +2,18 @@
 # Randy Direen
 # Started January 2018
 ################################################################################
-# Additional defines
+# Additional commands 
 #
+# Python: 
+# pyval - how Python sees a value
+# pybs - pretty view of breakpoints
+# pyfm - pretty view of selected frame
+#
+# Native:
 # main - Start program and stop on main
 # asm - view assembly
 # bpls - list all breakpoints
-# bprml- clear all breakpoints
+# bprml - clear all breakpoints
 # bp
 # bpc
 # bpe
@@ -27,6 +33,7 @@ set $64BITS = 1
 set confirm off
 set verbose off
 set prompt \033[32mgdb$ \033[0m
+set listsize 30
 
 # Display instructions in Intel format
 set disassembly-flavor intel
@@ -90,6 +97,21 @@ Run program and break on main()
 
 You can pass arguments with main "param1" "param2" etc. Just make sure to use
 the quotes!
+end
+
+define here
+    list *$rip
+end
+document here
+Shows you where you are right now
+end
+
+define cmd
+    print "Add commands to execute when bp hit, type end when done"
+    command $arg0
+end
+document cmd
+Add commands to a breakpoint every  time it's hit. Type end to stop commands.
 end
 
 define asm
@@ -312,183 +334,7 @@ Print eflags register.
 end
 
 define reg
-if ($64BITS == 1)
-# 64bits stuff
-   printf "  "
-   echo \033[32m
-   printf "RAX:"
-   echo \033[0m
-   printf " 0x%016lX  ", $rax
-   echo \033[32m
-   printf "RBX:"
-   echo \033[0m
-   printf " 0x%016lX  ", $rbx
-   echo \033[32m
-   printf "RCX:"
-   echo \033[0m
-   printf " 0x%016lX  ", $rcx
-   echo \033[32m
-   printf "RDX:"
-   echo \033[0m
-   printf " 0x%016lX  ", $rdx
-   echo \033[1m\033[4m\033[31m
-   flags
-   echo \033[0m
-   printf "  "
-   echo \033[32m
-   printf "RSI:"
-   echo \033[0m
-   printf " 0x%016lX  ", $rsi
-   echo \033[32m
-   printf "RDI:"
-   echo \033[0m
-   printf " 0x%016lX  ", $rdi
-   echo \033[32m
-   printf "RBP:"
-   echo \033[0m
-   printf " 0x%016lX  ", $rbp
-   echo \033[32m
-   printf "RSP:"
-   echo \033[0m
-   printf " 0x%016lX  ", $rsp
-   echo \033[32m
-   printf "RIP:"
-   echo \033[0m
-   printf " 0x%016lX\n  ", $rip
-   echo \033[32m
-   printf "R8 :"
-   echo \033[0m
-   printf " 0x%016lX  ", $r8
-   echo \033[32m
-   printf "R9 :"
-   echo \033[0m
-   printf " 0x%016lX  ", $r9
-   echo \033[32m
-   printf "R10:"
-   echo \033[0m
-   printf " 0x%016lX  ", $r10
-   echo \033[32m
-   printf "R11:"
-   echo \033[0m
-   printf " 0x%016lX  ", $r11
-   echo \033[32m
-   printf "R12:"
-   echo \033[0m
-   printf " 0x%016lX\n  ", $r12
-   echo \033[32m
-   printf "R13:"
-   echo \033[0m
-   printf " 0x%016lX  ", $r13
-   echo \033[32m
-   printf "R14:"
-   echo \033[0m
-   printf " 0x%016lX  ", $r14
-   echo \033[32m
-   printf "R15:"
-   echo \033[0m
-   printf " 0x%016lX\n  ", $r15
-   echo \033[32m
-   printf "CS:"
-   echo \033[0m
-   printf " %04X  ", $cs
-   echo \033[32m
-   printf "DS:"
-   echo \033[0m
-   printf " %04X  ", $ds
-   echo \033[32m
-   printf "ES:"
-   echo \033[0m
-   printf " %04X  ", $es
-   echo \033[32m
-   printf "FS:"
-   echo \033[0m
-   printf " %04X  ", $fs
-   echo \033[32m
-   printf "GS:"
-   echo \033[0m
-   printf " %04X  ", $gs
-   echo \033[32m
-   printf "SS:"
-   echo \033[0m
-   printf " %04X", $ss
-   echo \033[0m
-# 32bit stuff
-else
-   printf "  "
-   echo \033[32m
-   printf "EAX:"
-   echo \033[0m
-   printf " 0x%08X  ", $eax
-   echo \033[32m
-   printf "EBX:"
-   echo \033[0m
-   printf " 0x%08X  ", $ebx
-   echo \033[32m
-   printf "ECX:"
-   echo \033[0m
-   printf " 0x%08X  ", $ecx
-   echo \033[32m
-   printf "EDX:"
-   echo \033[0m
-   printf " 0x%08X  ", $edx
-   echo \033[1m\033[4m\033[31m
-   flags
-   echo \033[0m
-   printf "  "
-   echo \033[32m
-   printf "ESI:"
-   echo \033[0m
-   printf " 0x%08X  ", $esi
-   echo \033[32m
-   printf "EDI:"
-   echo \033[0m
-   printf " 0x%08X  ", $edi
-   echo \033[32m
-   printf "EBP:"
-   echo \033[0m
-   printf " 0x%08X  ", $ebp
-   echo \033[32m
-   printf "ESP:"
-   echo \033[0m
-   printf " 0x%08X  ", $esp
-   echo \033[32m
-   printf "EIP:"
-   echo \033[0m
-   printf " 0x%08X\n  ", $eip
-   echo \033[32m
-   printf "CS:"
-   echo \033[0m
-   printf " %04X  ", $cs
-   echo \033[32m
-   printf "DS:"
-   echo \033[0m
-   printf " %04X  ", $ds
-   echo \033[32m
-   printf "ES:"
-   echo \033[0m
-   printf " %04X  ", $es
-   echo \033[32m
-   printf "FS:"
-   echo \033[0m
-   printf " %04X  ", $fs
-   echo \033[32m
-   printf "GS:"
-   echo \033[0m
-   printf " %04X  ", $gs
-   echo \033[32m
-   printf "SS:"
-   echo \033[0m
-   printf " %04X", $ss
-   echo \033[0m
-end
-# call smallregisters
-        smallregisters
-# display conditional jump routine
-        if ($64BITS == 1)
-            printf "\t\t\t\t"
-        end
-        #dumpjump
-   printf "\n"
+    i registers
 end
 document reg
 Print CPU registers.
