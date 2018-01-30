@@ -45,6 +45,22 @@ class PythonGDBValue(gdb.Command):
             pass
 PythonGDBValue()
 
+class HereInfo(gdb.Command):
+    """ Prints information out about the gdb.Value passed """
+
+    def __init__(self):
+        super(HereInfo, self).__init__("pyhere", gdb.COMMAND_SUPPORT,
+                                                      gdb.COMPLETE_NONE,
+                                                      True)
+    def invoke(self, arg, from_tty):
+        pc = gdb.selected_frame().pc()
+        ln = gdb.find_pc_line(pc)
+        #bl = gdb.block_for_pc(pc)
+        print("Line Number: \33[33m" + str(ln.line) + "\33[0m")
+
+HereInfo()
+
+
 class PrettyPrintBreakpoints(gdb.Command):
     """ A cleaner view of the breakpoints 
     

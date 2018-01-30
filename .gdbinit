@@ -32,7 +32,7 @@ set $64BITS = 1
 
 set confirm off
 set verbose off
-set prompt \033[32mgdb$ \033[0m
+#set prompt \033[32mgdb$ \033[0m
 set listsize 30
 
 # Display instructions in Intel format
@@ -101,6 +101,7 @@ end
 
 define here
     list *$rip
+    pyhere
 end
 document here
 Shows you where you are right now
