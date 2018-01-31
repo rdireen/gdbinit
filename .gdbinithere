@@ -27,42 +27,6 @@
 # lib 
 # threads 
 
-#*****************************************************************************
-#*****************************************************************************
-# Python helpers 
-#*****************************************************************************
-#*****************************************************************************
-
-source ~/.gdb/common.py
-source ~/.gdb/vrt.py
-
-#*****************Dashboard Configuration*************************************
-#This is an awesome display in a separate terminal. See gdb-dashboard on 
-#github. For help, see 'help dashboard' within gdb
-#Set the output terminal with dashboard -output /dev/pts/#
-source ~/.gdb/gdb-dashboard
-
-# This will show the source and the stack
-# (See help dashboard -layout)
-dashboard -layout source stack threads
-
-define dtty
-    dashboard -output $arg0
-end
-document dtty
-Sets the dashboard output terminal
-end
-
-#These refresh dashboard everyt time you type up or down to get through the 
-#stack
-define hookpost-up
-    dashboard
-end
-define hookpost-down
-    dashboard
-end
-#*****************Dashboard Configuration*************************************
-
 # set to 1 to enable 64bits target by default (32bit is the default)
 set $64BITS = 1
 
@@ -81,12 +45,14 @@ set print vtbl on
 set print demangle on
 set print sevenbit-strings off
 
-set history save
-set confirm off
-set verbose off
-set print array off
-set print array-indexes on
-set python print-stack full
+#*****************************************************************************
+#*****************************************************************************
+# Python helpers 
+#*****************************************************************************
+#*****************************************************************************
+
+source ~/.gdb/common.py
+source ~/.gdb/vrt.py
 
 #*****************************************************************************
 #*****************************************************************************
@@ -106,7 +72,7 @@ define main
         r $arg0 $arg1
     end
     if $argc == 3
-        r $arg0 $arg1 $arg2
+        r $arg0 $arg1 $argr2
     end
     if $argc == 4
         r $arg0 $arg1 $arg2 $arg3
@@ -133,11 +99,11 @@ You can pass arguments with main "param1" "param2" etc. Just make sure to use
 the quotes!
 end
 
-define hh
+define here
     list *$rip
     pyhere
 end
-document hh
+document here
 Shows you where you are right now
 end
 
