@@ -27,12 +27,48 @@
 # lib 
 # threads 
 
+#*****************************************************************************
+#*****************************************************************************
+# Python helpers 
+#*****************************************************************************
+#*****************************************************************************
+
+source ~/.gdb/common.py
+source ~/.gdb/vrt.py
+
+#*****************Dashboard Configuration*************************************
+#This is an awesome display in a separate terminal. See gdb-dashboard on 
+#github. For help, see 'help dashboard' within gdb
+#Set the output terminal with dashboard -output /dev/pts/#
+source ~/.gdb/gdb-dashboard
+
+# This will show the source and the stack
+# (See help dashboard -layout)
+dashboard -layout source stack threads
+
+define dtty
+    dashboard -output $arg0
+end
+document dtty
+Sets the dashboard output terminal
+end
+
+#These refresh dashboard everyt time you type up or down to get through the 
+#stack
+define hookpost-up
+    dashboard
+end
+define hookpost-down
+    dashboard
+end
+#*****************Dashboard Configuration*************************************
+
 # set to 1 to enable 64bits target by default (32bit is the default)
 set $64BITS = 1
 
 set confirm off
 set verbose off
-set prompt \033[32mgdb$ \033[0m
+#set prompt \033[32mgdb$ \033[0m
 set listsize 30
 
 # Display instructions in Intel format
@@ -45,14 +81,12 @@ set print vtbl on
 set print demangle on
 set print sevenbit-strings off
 
-#*****************************************************************************
-#*****************************************************************************
-# Python helpers 
-#*****************************************************************************
-#*****************************************************************************
-
-source ~/.gdb/common.py
-source ~/.gdb/vrt.py
+set history save
+set confirm off
+set verbose off
+set print array off
+set print array-indexes on
+set python print-stack full
 
 #*****************************************************************************
 #*****************************************************************************
@@ -99,10 +133,10 @@ You can pass arguments with main "param1" "param2" etc. Just make sure to use
 the quotes!
 end
 
-define here
+define hh
     list *$rip
 end
-document here
+document hh
 Shows you where you are right now
 end
 
